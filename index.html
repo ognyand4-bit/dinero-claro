@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DineroClaro | Comparador financiero</title>
+  <meta name="description" content="Compara préstamos personales, cuentas bancarias y tarjetas en España.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #182238;
+      background: #f4f7fb;
+    }
+    header {
+      background: #10233f;
+      color: white;
+      padding: 20px;
+    }
+    .nav, main {
+      max-width: 1000px;
+      margin: auto;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .logo { font-size: 25px; font-weight: bold; }
+    nav a { color: white; text-decoration: none; margin-left: 12px; }
+    .hero {
+      background: #10233f;
+      color: white;
+      text-align: center;
+      padding: 45px 20px 70px;
+    }
+    .hero h1 { font-size: clamp(30px, 5vw, 44px); margin: 0 0 15px; }
+    .hero p { color: #d6dfed; line-height: 1.6; }
+    main { padding: 20px; }
+    .panel, .card {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid #e3e8f0;
+    }
+    .panel {
+      margin-top: -45px;
+      position: relative;
+      box-shadow: 0 8px 25px #14233c12;
+    }
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    label { display: block; font-weight: bold; margin-bottom: 8px; }
+    input, select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd4e2;
+      border-radius: 8px;
+      font-size: 16px;
+      background: white;
+    }
+    button, .button {
+      display: inline-block;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #1768e5;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .panel button { width: 100%; margin-top: 18px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .section { margin-top: 35px; }
+    .muted { color: #647087; line-height: 1.6; font-size: 14px; }
+    .result { margin-top: 18px; line-height: 1.8; }
+    .tag {
+      display: inline-block;
+      background: #e8f1ff;
+      color: #1756aa;
+      border-radius: 5px;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+    .notice {
+      background: #fff7e5;
+      border: 1px solid #f0dca9;
+      padding: 15px;
+      border-radius: 10px;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+    footer {
+      margin-top: 35px;
+      background: #10233f;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+      line-height: 2;
+    }
+    footer a { color: #d6e5ff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="logo">DineroClaro</div>
+      <nav>
+        <a href="#prestamos">Préstamos</a>
+        <a href="#cuentas">Cuentas</a>
+        <a href="#tarjetas">Tarjetas</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Compara opciones para tu bolsillo</h1>
+    <p>Explora productos financieros y consulta sus condiciones<br>
+    antes de tomar una decisión.</p>
+  </section>
+
+  <main>
+    <section class="panel">
+      <h2>Calcula tu préstamo</h2>
+      <p class="muted">Prueba distintos importes y plazos para obtener una estimación.</p>
+
+      <div class="fields">
+        <div>
+          <label for="amount">Importe (€)</label>
+          <input id="amount" type="number" min="500" max="50000" step="100" value="3000">
+        </div>
+        <div>
+          <label for="months">Plazo</label>
+          <select id="months">
+            <option value="12">12 meses</option>
+            <option value="24" selected>24 meses</option>
+            <option value="36">36 meses</option>
+            <option value="48">48 meses</option>
+            <option value="60">60 meses</option>
+          </select>
+        </div>
+        <div>
+          <label for="rate">TAE orientativa</label>
+          <select id="rate">
+            <option value="0.08">8 %</option>
+            <option value="0.12" selected>12 %</option>
+            <option value="0.18">18 %</option>
+            <option value="0.25">25 %</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="calculate()">Calcular cuota</button>
+      <div id="result" class="result" aria-live="polite"></div>
+    </section>
+
+    <section id="prestamos" class="section">
+      <h2>Préstamos personales</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="tag">Comparación</span>
+          <h3>Préstamos personales</h3>
+          <p class="muted">Compararemos intereses, comisiones, cuotas y coste total de distintas entidades.</p>
+          <p class="muted">Las ofertas se incorporarán después de verificar sus condiciones oficiales.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Promociones</span>
+          <h3>Primer préstamo al 0 %</h3>
+          <p class="muted">Buscaremos ofertas para nuevos clientes y comprobaremos los requisitos y costes reales.</p>
+        </article>
+        <article class="card">
+          <span class="tag">ASNEF</span>
+          <h3>Opciones para situaciones especiales</h3>
+          <p class="muted">Investigaremos entidades que indiquen expresamente si estudian solicitudes de personas en ASNEF. La aprobación nunca está garantizada.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="cuentas" class="section">
+      <h2>Cuentas bancarias</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Revolut</h3>
+          <p class="muted">Aquí mostraremos las características, comisiones y ventajas verificadas de su cuenta.</p>
+          <p class="muted">El enlace de registro se añadirá cuando confirmemos las condiciones de afiliación.</p>
+        </article>
+        <article class="card">
+          <h3>Cuentas sin comisiones</h3>
+          <p class="muted">Compararemos mantenimiento, tarjetas, transferencias y requisitos para disfrutar de cada cuenta.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="tarjetas" class="section">
+      <h2>Tarjetas de crédito</h2>
+      <div class="grid">
+        <article class="card">
+          <h3>Compara tarjetas</h3>
+          <p class="muted">Analizaremos intereses, comisiones y modalidades de devolución de cada tarjeta.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Información importante</h2>
+      <div class="notice">
+        DineroClaro es un proyecto informativo independiente. No concede préstamos ni garantiza aprobaciones.
+        La calculadora ofrece estimaciones, no ofertas reales. Antes de contratar, consulta la TAE,
+        el coste total y las condiciones oficiales de la entidad. Identificaremos los enlaces comerciales
+        o de afiliación cuando se incorporen.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>DineroClaro</strong><br>
+    Comparador financiero en desarrollo.<br>
+    <a href="privacidad.html">Privacidad</a> ·
+    <a href="aviso-legal.html">Aviso legal</a> ·
+    <a href="contacto.html">Contacto</a>
+    <br>© 2026 DineroClaro
+  </footer>
+
+  <script>
+    function calculate() {
+      const amount = Number(document.getElementById("amount").value);
+      const months = Number(document.getElementById("months").value);
+      const tae = Number(document.getElementById("rate").value);
+      const result = document.getElementById("result");
+
+      if (!Number.isFinite(amount) || amount < 500 || amount > 50000) {
+        result.textContent = "Introduce un importe entre 500 € y 50.000 €.";
+        return;
+      }
+
+      const monthlyRate = Math.pow(1 + tae, 1 / 12) - 1;
+      const payment = amount * monthlyRate /
+        (1 - Math.pow(1 + monthlyRate, -months));
+      const total = payment * months;
+
+      result.innerHTML =
+        "<strong>Cuota mensual estimada: " +
+        payment.toLocaleString("es-ES", { style: "currency", currency: "EUR" }) +
+        "</strong><br>Importe total estimado: " +
+        total.toLocaleString("es-ES", { style: "currency", currency: "EUR" }) +
+        "<br>Coste estimado: " +
+        (total - amount).toLocaleString("es-ES", { style: "currency", currency: "EUR" }) +
+        "<p class='muted'>Estimación matemática. La oferta real puede incluir otros costes y condiciones.</p>";
+    }
+    calculate();
+  </script>
+</body>
+</html>
